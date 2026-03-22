@@ -13,7 +13,7 @@ export default function AdminDraws() {
   const [publishing, setPublishing] = useState(null);
 
   const fetchDraws = () => {
-    api.get('/draws').then(r => { setDraws(r.data.draws || []); setLoading(false); }).catch(() => setLoading(false));
+    api.get('/admin/draws').then(r => { setDraws(r.data.draws || []); setLoading(false); }).catch(() => setLoading(false));
   };
 
   useEffect(() => { fetchDraws(); }, []);

@@ -3,6 +3,16 @@ import Draw from '../models/Draw.js';
 import Subscription from '../models/Subscription.js';
 import Charity from '../models/Charity.js';
 
+// GET /api/admin/draws — all draws including simulated
+export const getAllDraws = async (req, res, next) => {
+  try {
+    const draws = await Draw.find().sort({ year: -1, month: -1 }).populate('winners.user', 'name avatar');
+    res.json({ draws });
+  } catch (err) {
+    next(err);
+  }
+};
+
 // GET /api/admin/stats — dashboard overview
 export const getStats = async (req, res, next) => {
   try {

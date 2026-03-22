@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Trophy, Eye, EyeOff } from 'lucide-react';
+import { Trophy, Eye, EyeOff, Shield } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
 
@@ -76,6 +76,27 @@ export default function LoginPage() {
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
+
+          {/* Quick Admin Access */}
+          <button
+            type="button"
+            onClick={async () => {
+              setLoading(true);
+              try {
+                const user = await login('admin@test.com', 'Admin1234!');
+                toast.success(`Welcome back, ${user.name.split(' ')[0]}!`);
+                navigate('/admin');
+              } catch (err) {
+                toast.error(err.response?.data?.error || 'Admin login failed');
+              } finally {
+                setLoading(false);
+              }
+            }}
+            className="mt-4 flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl bg-white/5 hover:bg-white/10 text-sm text-white/60 hover:text-white transition-colors border border-white/5"
+          >
+            <Shield className="w-4 h-4" />
+            Quick Admin Login (Demo)
+          </button>
 
           <p className="text-center text-sm text-white/50 mt-6">
             Don't have an account?{' '}

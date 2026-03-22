@@ -59,6 +59,7 @@ const drawSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 const Charity = mongoose.model('Charity', charitySchema);
 const Draw = mongoose.model('Draw', drawSchema);
+import Subscription from './models/Subscription.js';
 
 const CHARITIES = [
   {
@@ -165,6 +166,13 @@ async function seed() {
         { value: 38, date: new Date('2026-02-10'), enteredAt: new Date() },
       ],
     });
+
+    // Create subscriptions
+    await Subscription.deleteMany({ user: { $in: [admin._id, subscriber._id] } });
+    await Subscription.create([
+      { user: admin._id, plan: 'yearly', status: 'active', stripeSubscriptionId: 'mock_admin', amount: 19999 },
+      { user: subscriber._id, plan: 'monthly', status: 'active', stripeSubscriptionId: 'mock_user', amount: 1999, charityPercentage: 15, selectedCharity: charities[0]._id }
+    ]);
 
     console.log('✅ Created admin user:      admin@test.com / Admin1234!');
     console.log('✅ Created subscriber user: user@test.com / User1234!');
